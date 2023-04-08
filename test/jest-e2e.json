@@ -1,5 +1,8 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
+  "globals": {
+    "TEST_ENVIRONMENT": "test"
+  },
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",

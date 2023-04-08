@@ -1,12 +1,13 @@
 import { Controller, Get, Headers } from '@nestjs/common';
 import { OpenAppService } from './openApp.service';
 import { IResponse } from './response.interface';
+import { ValidateEnv } from './utils/validateEnv';
 
 @Controller('open')
 export class OpenAppController {
   constructor(private readonly openAppService: OpenAppService) {
     this.openAppService = openAppService;
-    console.log('Env = ', process.env.NAME);
+    ValidateEnv();
   }
 
   @Get('ping')

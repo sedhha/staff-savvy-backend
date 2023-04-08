@@ -9,6 +9,7 @@ import { OpenAppService } from './openApp.service';
   imports: [
     ConfigModule.forRoot({
       envFilePath: process.env.TEST_ENVIRONMENT ? '.env.test' : '.env',
+      isGlobal: true,
     }),
   ],
   controllers: [AppController, OpenAppController],

@@ -1,0 +1,9 @@
+@BASEURL = http://localhost:3000
+
+POST {{BASEURL}}/auth/login
+Content-Type: application/json
+
+{
+    "email":"activity.schoolsh2@gmail.com",
+    "password":"TestPassword123"
+}

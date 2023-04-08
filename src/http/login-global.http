@@ -1,4 +1,5 @@
-@BASEURL = http://localhost:3000
+@BASEURL=https://wandering-shorts-deer.cyclic.app
+
 
 # POST {{BASEURL}}/auth/login
 # Content-Type: application/json

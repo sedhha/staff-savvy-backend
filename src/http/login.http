@@ -1,11 +1,13 @@
 @BASEURL = http://localhost:3000
 
-# POST {{BASEURL}}/auth/login
-# Content-Type: application/json
+POST {{BASEURL}}/auth/login
+Content-Type: application/json
 
-# {
-#     "email":"activity.schoolsh2@gmail.com",
-#     "password":"TestPassword123"
-# }
+{
+    "email":"activity.schoolsh2@gmail.com",
+    "password":"TestPassword123"
+}
+
+###
 
 GET {{BASEURL}}/open/ping

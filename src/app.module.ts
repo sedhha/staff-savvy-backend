@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
+import { WixConnectorAppController } from './wixConnectorApp.controller';
 import { OpenAppController } from './openApp.controller';
-import { AppService } from './app.service';
+import { WixConnectorAppService } from './wixConnectorApp.service';
 import { OpenAppService } from './openApp.service';
+import { WixApiKeyMiddleware } from './wixConnectorApp.middleware';
 
 @Module({
   imports: [
@@ -12,7 +13,11 @@ import { OpenAppService } from './openApp.service';
       isGlobal: true,
     }),
   ],
-  controllers: [AppController, OpenAppController],
-  providers: [AppService, OpenAppService],
+  controllers: [WixConnectorAppController, OpenAppController],
+  providers: [WixConnectorAppService, OpenAppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(WixApiKeyMiddleware).forRoutes(WixConnectorAppController);
+  }
+}

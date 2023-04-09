@@ -1,13 +1,31 @@
-@BASEURL = http://localhost:3000
 
+# Login User to the Service
 POST {{BASEURL}}/auth/login
 Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
 
 {
-    "email":"activity.schoolsh2@gmail.com",
-    "password":"TestPassword123"
+    "email":"{{EMAIL}}",
+    "password":"{{PASSWORD}}"
 }
 
 ###
 
+# SignUp User to the Service
+POST {{BASEURL}}/auth/individual-signup
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+
+{
+    "firstName":"Shivam",
+    "lastName":"Sahil",
+    "emailAddress":"{{EMAIL}}",
+    "orgCode":"{{ORG_CODE}}",
+    "employeeCode": "{{EMPLOYEE_CODE}}",
+    "securePassword": "{{PASSWORD}}"
+}
+
+###
+
+# Check if Service is Up and Running
 GET {{BASEURL}}/open/ping

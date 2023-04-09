@@ -1,18 +1,20 @@
 import {
   Body,
+  Headers,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { AppService } from './app.service';
+import { WixConnectorAppService } from './wixConnectorApp.service';
 import { zodValidator } from './utils/zodValidator';
 import { z } from 'zod';
+import { ISignUpUser } from './wixConnectorApp.interface';
 
 @Controller('auth')
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+export class WixConnectorAppController {
+  constructor(private readonly appService: WixConnectorAppService) {}
 
   @Get()
   getHello(): string {
@@ -37,5 +39,9 @@ export class AppController {
       };
       return this.appService.loginUser(email, password);
     }
+  }
+  @Post('individual-signup')
+  signupUser(@Headers() headers, @Body() body: ISignUpUser) {
+    return this.appService.signupUser(body);
   }
 }

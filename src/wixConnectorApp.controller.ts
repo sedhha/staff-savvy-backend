@@ -39,7 +39,7 @@ export class WixConnectorAppController {
       return this.appService.loginUser(email, password);
     }
   }
-  @Post('individual-signup')
+  @Post('signup')
   signupUser(@Body() body: ISignUpUser) {
     return this.appService.signupUser(body);
   }

@@ -39,7 +39,27 @@ export class WixConnectorAppService {
         return { data: { user: data.user, session: data.session } };
       });
   }
-  async signupUser(payload: ISignUpUser): Promise<{
+  async signupUser(payload: ISignUpUser): Promise<
+    | {
+        message?: string;
+        data?: { user: User; session: Session };
+      }
+    | {
+        message?: string;
+        data?: { user: User; session: Session };
+      }
+    | void
+  > {
+    const response = zodValidator<ISignUpUser>(signupUserSchema, payload);
+    if (response.isError)
+      throw new HttpException(
+        (response as { message: string }).message,
+        HttpStatus.BAD_REQUEST,
+      );
+    if (payload.isAdmin) return this.signupAdmin(response as ISignUpUser);
+    return this.signupIndividual(response as ISignUpUser);
+  }
+  async signupIndividual(payload: ISignUpUser): Promise<{
     message?: string;
     data?: { user: User; session: Session };
   } | void> {

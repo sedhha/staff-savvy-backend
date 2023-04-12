@@ -41,7 +41,11 @@ export class WixConnectorAppController {
     }
   }
   @Post('individual-signup')
-  signupUser(@Headers() headers, @Body() body: ISignUpUser) {
+  signupUser(@Body() body: ISignUpUser) {
     return this.appService.signupUser(body);
+  }
+  @Post('org-admin-signup')
+  signupAdmin(@Body() body: ISignUpUser) {
+    return this.appService.signupAdmin(body);
   }
 }

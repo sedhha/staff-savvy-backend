@@ -4,4 +4,5 @@ const admin = createClient(
   process.env.SUPERBASE_PRIVATE_SERVICE_ROLE,
 );
 const { auth } = admin;
+export default admin;
 export { auth };

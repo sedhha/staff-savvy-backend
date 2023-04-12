@@ -5,6 +5,7 @@ interface ISignUpUser {
   orgCode: string;
   employeeCode: string;
   securePassword: string;
+  isAdmin?: boolean;
 }
 interface ISupaBaseUser {
   id: string;
@@ -84,4 +85,11 @@ interface ISupaBaseSession {
   expires_at: number;
 }
 
-export { ISignUpUser, ISupaBaseUser, ISupaBaseSession };
+interface IRegistrationTable {
+  orgID: string;
+  orgName: string;
+  userUID?: string;
+  registered: boolean;
+}
+
+export { ISignUpUser, ISupaBaseUser, ISupaBaseSession, IRegistrationTable };

@@ -20,7 +20,7 @@ export class WixConnectorAppController {
     return this.appService.getHello();
   }
   @Post('login')
-  loginUser(@Body() body: { email: string; password: string }) {
+  async loginUser(@Body() body: { email: string; password: string }) {
     const loginUserSchema = z.object({
       email: z.string(),
       password: z.string(),
@@ -44,7 +44,7 @@ export class WixConnectorAppController {
     return this.appService.signupUser(body);
   }
   @Post('org-admin-signup')
-  signupAdmin(@Body() body: ISignUpUser) {
+  async signupAdmin(@Body() body: ISignUpUser) {
     return this.appService.signupAdmin(body);
   }
 }

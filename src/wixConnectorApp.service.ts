@@ -107,7 +107,7 @@ export class WixConnectorAppService {
             HttpStatus.BAD_REQUEST,
           );
         } else {
-          auth
+          return auth
             .signUp({
               email: emailAddress,
               password: securePassword,
@@ -124,12 +124,9 @@ export class WixConnectorAppService {
             })
             .then(({ data, error }) => {
               if (error)
-                throw new HttpException(
-                  error.message,
-                  HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
               const { user } = data;
-              Admin.from(tables.magicCodeTables)
+              return Admin.from(tables.magicCodeTables)
                 .update({
                   [tableFields.magicCodeTables.userUID]: user.id,
                   registered: true,

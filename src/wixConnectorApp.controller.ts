@@ -41,10 +41,6 @@ export class WixConnectorAppController {
   }
   @Post('signup')
   signupUser(@Body() body: ISignUpUser) {
-    return this.appService.signupUser(body);
-  }
-  @Post('org-admin-signup')
-  async signupAdmin(@Body() body: ISignUpUser) {
-    return this.appService.signupAdmin(body);
+    return this.appService.signUpUser(body);
   }
 }

@@ -27,7 +27,7 @@ x-wix-api-key: {{WIX_BACKEND_API_KEY}}
 
 ###
 # SignUp Admin to the Service
-POST {{BASEURL}}/auth/org-admin-signup
+POST {{BASEURL}}/auth/signup
 Content-Type: application/json
 x-wix-api-key: {{WIX_BACKEND_API_KEY}}
 
@@ -36,7 +36,7 @@ x-wix-api-key: {{WIX_BACKEND_API_KEY}}
     "lastName":"Sahil",
     "emailAddress":"{{EMAIL}}",
     "orgCode":"{{ORG_CODE}}",
-    "employeeCode": "{{EMPLOYEE_CODE}}",
+    "employeeCode": "{{ORG_CODE}}",
     "securePassword": "{{PASSWORD}}",
     "isAdmin": true
 }

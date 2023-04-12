@@ -13,7 +13,7 @@ const signupUserSchema = z.object({
   orgCode: z.string(),
   employeeCode: z.string(),
   securePassword: z.string(),
-  isAdmin: z.boolean().nullable(),
+  isAdmin: z.boolean().optional(),
 });
 
 @Injectable()
@@ -39,55 +39,7 @@ export class WixConnectorAppService {
         return { data: { user: data.user, session: data.session } };
       });
   }
-  async signupUser(payload: ISignUpUser): Promise<
-    | {
-        message?: string;
-        data?: { user: User; session: Session };
-      }
-    | {
-        message?: string;
-        data?: { user: User; session: Session };
-      }
-    | void
-  > {
-    const response = zodValidator<ISignUpUser>(signupUserSchema, payload);
-    if (response.isError)
-      throw new HttpException(
-        (response as { message: string }).message,
-        HttpStatus.BAD_REQUEST,
-      );
-    if (payload.isAdmin) return this.signupAdmin(response as ISignUpUser);
-    return this.signupIndividual(response as ISignUpUser);
-  }
-  async signupIndividual(payload: ISignUpUser): Promise<{
-    message?: string;
-    data?: { user: User; session: Session };
-  } | void> {
-    const response = zodValidator<ISignUpUser>(signupUserSchema, payload);
-    if (response.isError)
-      throw new HttpException(
-        (response as { message: string }).message,
-        HttpStatus.BAD_REQUEST,
-      );
-    return auth
-      .signUp({
-        email: (response as ISignUpUser).emailAddress,
-        password: (response as ISignUpUser).securePassword,
-        options: {
-          data: {
-            firstName: (response as ISignUpUser).firstName,
-            lastName: (response as ISignUpUser).lastName,
-            orgCode: (response as ISignUpUser).orgCode,
-            employeeCode: (response as ISignUpUser).employeeCode,
-            orgAdmin: false,
-            email_confirm: true,
-          },
-        },
-      })
-      .then((data) => data)
-      .catch((error) => ({ message: error.message }));
-  }
-  async signupAdmin(payload: ISignUpUser): Promise<{
+  async signUpUser(payload: ISignUpUser): Promise<{
     message?: string;
     error: boolean;
   } | void> {
@@ -97,24 +49,39 @@ export class WixConnectorAppService {
         (response as { message: string }).message,
         HttpStatus.BAD_REQUEST,
       );
-    const {
-      isAdmin,
-      emailAddress,
-      employeeCode,
-      orgCode,
-      lastName,
-      firstName,
-      securePassword,
-    } = response as ISignUpUser;
+    const { isAdmin, employeeCode } = response as ISignUpUser;
 
-    if (!isAdmin)
-      throw new HttpException(
-        'Org employee registration not allowed with these set of credentials',
-        HttpStatus.CONFLICT,
-      );
-    return Admin.from(tables.magicCodeTables)
+    return this.registerUserProcess(
+      isAdmin,
+      employeeCode,
+      response as ISignUpUser,
+    );
+  }
+  async registerUserProcess(
+    isAdmin: boolean,
+    magicCode: string,
+    user: ISignUpUser,
+  ) {
+    const headerFilterID = isAdmin
+      ? tableFields.magicCodeTables.orgID
+      : tableFields.magicCodeEmployeeTable.employeeCode;
+    const tableName = isAdmin
+      ? tables.magicCodeTables
+      : tables.magicCodeEmployeeTable;
+    const fieldNameToUpdate = isAdmin
+      ? tableFields.magicCodeTables.userUID
+      : tableFields.magicCodeEmployeeTable.employeeUID;
+    const {
+      emailAddress,
+      securePassword,
+      firstName,
+      lastName,
+      orgCode,
+      employeeCode,
+    } = user;
+    return Admin.from(tableName)
       .select('*')
-      .eq(tableFields.magicCodeTables.orgID, employeeCode)
+      .eq(headerFilterID, magicCode)
       .then(({ data, error }) => {
         if (error || !data?.length) {
           throw new HttpException(
@@ -137,7 +104,7 @@ export class WixConnectorAppService {
                   lastName: lastName,
                   orgCode: orgCode,
                   employeeCode: employeeCode,
-                  orgAdmin: false,
+                  orgAdmin: isAdmin,
                   email_confirm: true,
                 },
               },
@@ -146,22 +113,26 @@ export class WixConnectorAppService {
               if (error)
                 throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
               const { user } = data;
-              return Admin.from(tables.magicCodeTables)
+              return Admin.from(tableName)
                 .update({
-                  [tableFields.magicCodeTables.userUID]: user.id,
+                  [fieldNameToUpdate]: user.id,
                   registered: true,
                 })
-                .eq(tableFields.magicCodeTables.orgID, employeeCode)
+                .eq(headerFilterID, magicCode)
                 .then(({ error }) => {
-                  if (error)
+                  if (error) {
+                    Admin.auth.admin.deleteUser(user.id);
                     throw new HttpException(
                       error.message,
                       HttpStatus.INTERNAL_SERVER_ERROR,
                     );
+                  }
+                  const successMessage = isAdmin
+                    ? 'Successfully created Org. You can go and start using Staff Savvyy'
+                    : 'Successfully created Employee Account. You can go and start using Staff Savvyy';
                   return {
                     error: false,
-                    message:
-                      'Successfully created Org. You can go and start using Staff Savvyy',
+                    message: successMessage,
                   };
                 });
             });

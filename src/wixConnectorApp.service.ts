@@ -96,7 +96,7 @@ export class WixConnectorAppService {
       .select('*')
       .eq(tableFields.magicCodeTables.orgID, employeeCode)
       .then(({ data, error }) => {
-        if (error) {
+        if (error || !data?.length) {
           throw new HttpException(
             'Invalid or Expired Magic Code. Please contact the administrator',
             HttpStatus.BAD_REQUEST,
@@ -132,6 +132,7 @@ export class WixConnectorAppService {
               Admin.from(tables.magicCodeTables)
                 .update({
                   [tableFields.magicCodeTables.userUID]: user.id,
+                  registered: true,
                 })
                 .eq(tableFields.magicCodeTables.orgID, employeeCode)
                 .then(({ error }) => {

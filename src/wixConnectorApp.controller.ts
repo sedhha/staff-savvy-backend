@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Post,
@@ -20,6 +21,7 @@ export class WixConnectorAppController {
     return this.appService.getHello();
   }
   @Post('login')
+  @HttpCode(200)
   async loginUser(@Body() body: { email: string; password: string }) {
     const loginUserSchema = z.object({
       email: z.string(),

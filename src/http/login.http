@@ -6,7 +6,7 @@ x-wix-api-key: {{WIX_BACKEND_API_KEY}}
 
 {
     "email":"{{EMAIL}}",
-    "password":"{{PASSWORD}}"
+    "password":"{{PERSONAL_PASSWORD}}"
 }
 
 ###

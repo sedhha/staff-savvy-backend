@@ -8,6 +8,7 @@ const envSchema = z.object({
   SUPERBASE_PROJECT_ID: z.string(),
   SUPERBASE_PUBLIC_CLIENT_ID: z.string(),
   SUPERBASE_PRIVATE_SERVICE_ROLE: z.string(),
+  SUPABASE_PRIVATE_JWT_SECRET: z.string(),
 });
 export const ValidateEnv = () => {
   const parsed = envSchema.safeParse(process.env);

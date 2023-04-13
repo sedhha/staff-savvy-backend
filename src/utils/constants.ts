@@ -7,12 +7,12 @@ export const tables = {
 export const tableFields = {
   magicCodeTables: {
     userUID: 'userUID',
-    orgID: 'orgID',
+    orgID: 'orgCode',
   },
   magicCodeEmployeeTable: {
     employeeCode: 'employeeCode',
     employeeUID: 'employeeUID',
-    orgID: 'orgID',
+    orgID: 'orgCode',
   },
   users: {
     userID: 'id',

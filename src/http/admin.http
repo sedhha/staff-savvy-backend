@@ -10,3 +10,15 @@ GET {{BASEURL}}/admin/generate-magic-link
 Content-Type: application/json
 x-wix-api-key: {{WIX_BACKEND_API_KEY}}
 Authorization: bearer {{BEARER_TOKEN}}
+
+### Get Pending Magic Link
+GET {{BASEURL}}/admin/get-pending-magic-links
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}
+
+### Revoke Pending Magic Link by ID
+GET {{BASEURL}}/admin/revoke-pending-magic-link?employeeCode=38d6ded8-1329-4416-a775-686be9cad161
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}

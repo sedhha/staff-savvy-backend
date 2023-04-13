@@ -20,4 +20,27 @@ export class AdminAppService {
         return { magicLink: id };
       });
   }
+
+  async getPendingGeneratedLinks(orgCode: string) {
+    return Admin.from(tables.magicCodeEmployeeTable)
+      .select(tableFields.magicCodeEmployeeTable.employeeCode)
+      .eq(tableFields.magicCodeEmployeeTable.orgID, orgCode)
+      .then(({ error, data }) => {
+        if (error)
+          throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        return data;
+      });
+  }
+
+  async removeInviteByCode(orgCode: string, employeeCode: string) {
+    return Admin.from(tables.magicCodeEmployeeTable)
+      .delete()
+      .eq(tableFields.magicCodeEmployeeTable.orgID, orgCode)
+      .eq(tableFields.magicCodeEmployeeTable.employeeCode, employeeCode)
+      .then(({ error, status }) => {
+        console.log({ status });
+        if (error)
+          throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      });
+  }
 }

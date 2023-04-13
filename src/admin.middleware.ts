@@ -37,6 +37,13 @@ export class AdminAppMiddleware implements NestMiddleware {
         token,
         process.env.SUPABASE_PRIVATE_JWT_SECRET,
       ) as JwtPayload;
+
+      const expired = user.exp;
+      if (new Date() > new Date(expired * 1000))
+        throw new HttpException(
+          'Session Expired. Please login again!',
+          HttpStatus.GONE,
+        );
       if (!(user as ISupaBaseUser).user_metadata.orgAdmin)
         throw new HttpException(
           `${user?.user_metadata?.firstName} is not authorized to make this request: ${user?.user_metadata?.orgAdmin}`,

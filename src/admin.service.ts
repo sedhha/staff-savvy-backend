@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import Admin from './utils/admin';
 import { tables, tableFields } from './utils/constants';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AdminAppService {
   async generateMagicLinkForEmployee(orgCode: string) {
-    const id = crypto.randomUUID();
+    const id = uuidv4();
     return Admin.from(tables.magicCodeEmployeeTable)
       .insert([
         {
@@ -13,14 +14,10 @@ export class AdminAppService {
           [tableFields.magicCodeEmployeeTable.orgID]: orgCode,
         },
       ])
-      .then(({ data, error }) => {
-        if (error || !data) {
-          throw new HttpException(
-            'Invalid or Expired Magic Code. Please contact the administrator',
-            HttpStatus.BAD_REQUEST,
-          );
-        }
-        return { magicLink: id, insertedData: data };
+      .then(({ error }) => {
+        if (error)
+          throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        return { magicLink: id };
       });
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Body } from '@nestjs/common';
+import { Controller, Get, Body, HttpCode } from '@nestjs/common';
 import { AdminAppService } from './admin.service';
 import { ISupaBaseUser } from './wixConnectorApp.interface';
 
@@ -12,6 +12,7 @@ export class AdminAppController {
   }
 
   @Get('generate-magic-link')
+  @HttpCode(201)
   async generateMagicLink(@Body() body: { supabaseUser: ISupaBaseUser }) {
     return this.appService.generateMagicLinkForEmployee(
       body.supabaseUser.user_metadata.employeeCode,

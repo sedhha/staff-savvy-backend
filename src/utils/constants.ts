@@ -13,6 +13,11 @@ export const tableFields = {
     employeeCode: 'employeeCode',
     employeeUID: 'employeeUID',
     orgID: 'orgCode',
+    email: 'email',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    permissions: 'permissions',
+    isActive: 'isActive',
   },
   users: {
     userID: 'id',

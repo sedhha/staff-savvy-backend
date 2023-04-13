@@ -79,6 +79,15 @@ export class WixConnectorAppService {
       orgCode,
       employeeCode,
     } = user;
+    const remainingFields = isAdmin
+      ? {}
+      : {
+          email: emailAddress,
+          firstName,
+          lastName,
+          permissions: '',
+          isActive: true,
+        };
     return Admin.from(tableName)
       .select('*')
       .eq(headerFilterID, magicCode)
@@ -115,6 +124,7 @@ export class WixConnectorAppService {
               const { user } = data;
               return Admin.from(tableName)
                 .update({
+                  ...remainingFields,
                   [fieldNameToUpdate]: user.id,
                   registered: true,
                 })

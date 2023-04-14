@@ -39,5 +39,7 @@ export const tableFields = {
     orgID: 'orgID',
     userID: 'userID',
     remarks: 'remarks',
+    primaryCategory: 'primaryCategory',
+    secondaryCategory: 'secondaryCategory',
   },
 };

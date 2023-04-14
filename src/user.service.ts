@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import Admin from './utils/admin';
 import { tables, tableFields } from './utils/constants';
 import { z } from 'zod';
-import { IAccessRequest } from './admin.interfaces';
+import { IAccessFE, IAccessRequest } from './admin.interfaces';
 import { zodErrorFormatter } from './utils/zodErrorFormatter';
 
 const requestAccessSchema = z.object({
@@ -56,7 +56,9 @@ export class UserAppService {
       const result = requestAccessSchema.parse(payload) as IAccessRequest;
       const { accessID, remarks } = result;
       return Admin.from(tables.accessTable)
-        .select(tableFields.accessTable.disabled)
+        .select(
+          `${tableFields.accessTable.primaryCategory},${tableFields.accessTable.secondaryCategory}`,
+        )
         .eq(tableFields.accessTable.orgID, orgCode)
         .eq(tableFields.accessTable.accessToken, accessID)
         .then(({ data }) => {
@@ -65,6 +67,8 @@ export class UserAppService {
               'No Record found for accessID: ' + accessID,
               HttpStatus.NOT_FOUND,
             );
+          const { primaryCategory, secondaryCategory } =
+            data[0] as unknown as IAccessFE;
 
           return Admin.from(tables.userRequestHistory)
             .select(tableFields.userRequestHistory.approved)
@@ -85,6 +89,10 @@ export class UserAppService {
                     [tableFields.userRequestHistory.orgID]: orgCode,
                     [tableFields.userRequestHistory.remarks]: remarks,
                     [tableFields.userRequestHistory.userID]: userID,
+                    [tableFields.userRequestHistory.primaryCategory]:
+                      primaryCategory,
+                    [tableFields.userRequestHistory.secondaryCategory]:
+                      secondaryCategory,
                   },
                 ])
                 .then(({ error }) => {

@@ -97,7 +97,7 @@ export class AdminAppService {
   async addAccessToOrg(orgCode: string, payload: IAccessFE[]) {
     try {
       const result = accessZodSchema.parse(payload) as IAccessFE[];
-      const id = accessGeneratorId().next().value;
+      const id = `${new Date().getTime()}-${accessGeneratorId().next().value}`;
       const insertionData = result.map((item) => {
         const { primaryCategory, secondaryCategory, description } = item;
         return {

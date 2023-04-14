@@ -62,13 +62,21 @@ export class AdminAppService {
   async getAllAccessByOrgID(orgCode: string) {
     return Admin.from(tables.accessTable)
       .select(
-        `${tableFields.accessTable.primaryCategory},${tableFields.accessTable.secondaryCategory},${tableFields.accessTable.disabled},${tableFields.accessTable.description}`,
+        `${tableFields.accessTable.primaryCategory},${tableFields.accessTable.secondaryCategory},${tableFields.accessTable.disabled},${tableFields.accessTable.description},${tableFields.accessTable.tokenElement}`,
       )
       .eq(tableFields.magicCodeEmployeeTable.orgID, orgCode)
       .then(({ error, data }) => {
         if (error)
           throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-        return data;
+        const finalData = (data as unknown as IAccessFE[]).reduce(
+          (acc, curr) => {
+            acc.primary.push(curr.primaryCategory);
+            acc.secondary.push(curr.secondaryCategory);
+            return acc;
+          },
+          { primary: [], secondary: [] },
+        );
+        return { data, categories: finalData };
       });
   }
 

@@ -19,6 +19,14 @@ export class UserAppController {
     );
   }
 
+  @Get('get-my-access')
+  async getMyAccess(@Body() body: { supabaseUser: ISupaBaseUser }) {
+    return this.appService.getMyAccess(
+      body.supabaseUser.user_metadata.orgCode,
+      body.supabaseUser.user_metadata.employeeCode,
+    );
+  }
+
   @Post('request-access')
   async requestAccess(
     @Body() body: { supabaseUser: ISupaBaseUser; payload: IAccessRequest },

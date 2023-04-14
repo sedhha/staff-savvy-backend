@@ -35,6 +35,18 @@ export class UserAppService {
       });
   }
 
+  async getMyAccess(orgCode: string, employeeCode: string) {
+    return Admin.from(tables.userRequestHistory)
+      .select('*')
+      .eq(tableFields.userRequestHistory.orgID, orgCode)
+      .eq(tableFields.userRequestHistory.userID, employeeCode)
+      .then(({ error, data }) => {
+        if (error)
+          throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        return data;
+      });
+  }
+
   async addAnAccessRequest(
     orgCode: string,
     userID: string,

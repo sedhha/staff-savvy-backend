@@ -2,6 +2,7 @@ export const tables = {
   magicCodeTables: 'orgRegistration',
   magicCodeEmployeeTable: 'employeeRegistration',
   users: 'users',
+  accessTable: 'orgAccessTable',
 };
 
 export const tableFields = {
@@ -21,5 +22,14 @@ export const tableFields = {
   },
   users: {
     userID: 'id',
+  },
+  accessTable: {
+    primaryCategory: 'primaryCategory',
+    secondaryCategory: 'secondaryCategory',
+    disabled: 'disabled',
+    description: 'accessDescription',
+    orgID: 'orgCode',
+    tokenElement: 'tokenElement',
+    accessToken: 'accessToken',
   },
 };

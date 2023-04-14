@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Post,
   Body,
   HttpCode,
   Query,
@@ -8,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { AdminAppService } from './admin.service';
 import { ISupaBaseUser } from './wixConnectorApp.interface';
+import { IAccessFE } from './admin.interfaces';
 
 @Controller('admin')
 export class AdminAppController {
@@ -43,6 +45,21 @@ export class AdminAppController {
     return this.appService.removeInviteByCode(
       body.supabaseUser.user_metadata.employeeCode,
       employeeCode,
+    );
+  }
+  @Get('get-all-accesses')
+  async getAllAccess(@Body() body: { supabaseUser: ISupaBaseUser }) {
+    return this.appService.getAllAccessByOrgID(
+      body.supabaseUser.user_metadata.employeeCode,
+    );
+  }
+  @Post('add-access-to-org')
+  async addAccessToOrg(
+    @Body() body: { supabaseUser: ISupaBaseUser; payload: IAccessFE[] },
+  ) {
+    return this.appService.addAccessToOrg(
+      body.supabaseUser.user_metadata.employeeCode,
+      body.payload,
     );
   }
 }

@@ -2,7 +2,23 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import Admin from './utils/admin';
 import { tables, tableFields } from './utils/constants';
 import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod';
+import { IAccessFE } from './admin.interfaces';
+import { zodErrorFormatter } from './utils/zodErrorFormatter';
+let i = 0;
+function* accessGeneratorId() {
+  while (true) {
+    yield i++;
+  }
+}
 
+const accessZodSchema = z.array(
+  z.object({
+    primaryCategory: z.string(),
+    secondaryCategory: z.string(),
+    description: z.string(),
+  }),
+);
 @Injectable()
 export class AdminAppService {
   async generateMagicLinkForEmployee(orgCode: string) {
@@ -37,10 +53,60 @@ export class AdminAppService {
       .delete()
       .eq(tableFields.magicCodeEmployeeTable.orgID, orgCode)
       .eq(tableFields.magicCodeEmployeeTable.employeeCode, employeeCode)
-      .then(({ error, status }) => {
-        console.log({ status });
+      .then(({ error }) => {
         if (error)
           throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       });
+  }
+
+  async getAllAccessByOrgID(orgCode: string) {
+    return Admin.from(tables.accessTable)
+      .select(
+        `${tableFields.accessTable.primaryCategory},${tableFields.accessTable.secondaryCategory},${tableFields.accessTable.disabled},${tableFields.accessTable.description}`,
+      )
+      .eq(tableFields.magicCodeEmployeeTable.orgID, orgCode)
+      .then(({ error, data }) => {
+        if (error)
+          throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        return data;
+      });
+  }
+
+  async addAccessToOrg(orgCode: string, payload: IAccessFE[]) {
+    try {
+      const result = accessZodSchema.parse(payload) as IAccessFE[];
+      const id = accessGeneratorId().next().value;
+      const insertionData = result.map((item) => {
+        const { primaryCategory, secondaryCategory, description } = item;
+        return {
+          [tableFields.accessTable.orgID]: orgCode,
+          [tableFields.accessTable.disabled]: false,
+          [tableFields.accessTable.primaryCategory]: primaryCategory,
+          [tableFields.accessTable.secondaryCategory]: secondaryCategory,
+          [tableFields.accessTable.description]: description,
+          [tableFields.accessTable
+            .tokenElement]: `${primaryCategory.toLowerCase()}:${secondaryCategory.toLowerCase()}:${id}`,
+          [tableFields.accessTable.accessToken]: id,
+        };
+      });
+      return Admin.from(tables.accessTable)
+        .insert(insertionData)
+        .then(({ error, data }) => {
+          if (error) {
+            if (error.code === '23505')
+              throw new HttpException(
+                'Please try renaming the secondary category. As the given access already exists!',
+                HttpStatus.CONFLICT,
+              );
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+          }
+          return data;
+        });
+    } catch (error) {
+      throw new HttpException(
+        zodErrorFormatter(error.errors),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

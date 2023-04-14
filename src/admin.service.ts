@@ -99,7 +99,7 @@ export class AdminAppService {
           [tableFields.accessTable.secondaryCategory]: secondaryCategory,
           [tableFields.accessTable.description]: description,
           [tableFields.accessTable
-            .tokenElement]: `${primaryCategory.toLowerCase()}:${secondaryCategory.toLowerCase()}:${id}`,
+            .tokenElement]: `${primaryCategory.toLowerCase()}:${secondaryCategory.toLowerCase()}`,
           [tableFields.accessTable.accessToken]: id,
         };
       });
@@ -107,6 +107,7 @@ export class AdminAppService {
         .insert(insertionData)
         .then(({ error, data }) => {
           if (error) {
+            console.log('Error = ', error);
             if (error.code === '23505')
               throw new HttpException(
                 'Please try renaming the secondary category. As the given access already exists!',

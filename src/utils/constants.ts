@@ -27,7 +27,7 @@ export const tableFields = {
     primaryCategory: 'primaryCategory',
     secondaryCategory: 'secondaryCategory',
     disabled: 'disabled',
-    description: 'accessDescription',
+    description: 'description',
     orgID: 'orgCode',
     tokenElement: 'tokenElement',
     accessToken: 'accessToken',

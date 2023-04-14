@@ -39,8 +39,8 @@ Authorization: bearer {{BEARER_TOKEN}}
     "payload": [
                     {
                         "primaryCategory":"Software",
-                        "secondaryCategory": "GSuite",
-                        "description":"G Suite is a cloud-based productivity suite designed and developed by Google. It includes a range of powerful and collaborative tools such as Gmail, Google Drive, Google Docs, Google Sheets, Google Slides, and Google Forms."
+                        "secondaryCategory": "Github",
+                        "description":"GitHub is a web-based platform that allows developers to store and manage their code repositories, collaborate with others, and track changes. It provides a user-friendly interface and powerful tools to support agile development workflows. It is widely used by individual developers and large organizations alike for open-source projects, private projects, and project management."
                     }
                 ]
 }

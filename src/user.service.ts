@@ -15,7 +15,7 @@ export class UserAppService {
   async getAllCategories(orgCode: string) {
     return Admin.from(tables.accessTable)
       .select(
-        `${tableFields.accessTable.primaryCategory},${tableFields.accessTable.secondaryCategory}`,
+        `${tableFields.accessTable.primaryCategory},${tableFields.accessTable.secondaryCategory},${tableFields.accessTable.accessToken}`,
       )
       .eq(tableFields.accessTable.orgID, orgCode)
       .then(({ error, data }) => {
@@ -29,6 +29,7 @@ export class UserAppService {
               curr[tableFields.accessTable.primaryCategory];
             const secondaryCategory =
               curr[tableFields.accessTable.secondaryCategory];
+            const accessToken = curr[tableFields.accessTable.accessToken];
             if (!pC[primaryCategory]) {
               pC[primaryCategory] = true;
               acc.primary.push({
@@ -40,7 +41,7 @@ export class UserAppService {
               sC[secondaryCategory] = true;
               acc.secondary.push({
                 label: secondaryCategory,
-                value: secondaryCategory,
+                value: accessToken,
               });
             }
             return acc;

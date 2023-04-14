@@ -3,3 +3,8 @@ export interface IAccessFE {
   secondaryCategory: string;
   description: string;
 }
+
+export interface IAccessRequest {
+  remarks: string;
+  accessID: string;
+}

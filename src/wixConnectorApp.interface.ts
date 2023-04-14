@@ -86,9 +86,13 @@ interface ISupaBaseSession {
 }
 
 interface IRegistrationTable {
-  orgID: string;
-  orgName: string;
-  userUID?: string;
+  orgCode: string;
+  employeeCode: string;
+  employeeUID?: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  isActive: boolean;
   registered: boolean;
 }
 

@@ -1,0 +1,30 @@
+# Users Ping
+GET {{BASEURL}}/user/ping
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}
+
+###
+
+# Users Get Request Categories
+GET {{BASEURL}}/user/get-request-categories
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}
+
+###
+
+# Users Add Request For Access
+POST {{BASEURL}}/user/request-access
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}
+
+{
+    "payload": {
+        "remarks": "I want to try out this App.",
+        "accessID": "0"
+    }
+}
+
+###

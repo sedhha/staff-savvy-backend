@@ -8,6 +8,9 @@ import { WixApiKeyMiddleware } from './wixConnectorApp.middleware';
 import { AdminAppController } from './admin.controller';
 import { AdminAppService } from './admin.service';
 import { AdminAppMiddleware } from './admin.middleware';
+import { UserAppService } from './user.service';
+import { UserAppController } from './user.controller';
+import { UserAppMiddleware } from './user.middleware';
 
 @Module({
   imports: [
@@ -20,12 +23,19 @@ import { AdminAppMiddleware } from './admin.middleware';
     WixConnectorAppController,
     OpenAppController,
     AdminAppController,
+    UserAppController,
   ],
-  providers: [WixConnectorAppService, OpenAppService, AdminAppService],
+  providers: [
+    WixConnectorAppService,
+    OpenAppService,
+    AdminAppService,
+    UserAppService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(WixApiKeyMiddleware).forRoutes(WixConnectorAppController);
     consumer.apply(AdminAppMiddleware).forRoutes(AdminAppController);
+    consumer.apply(UserAppMiddleware).forRoutes(UserAppController);
   }
 }

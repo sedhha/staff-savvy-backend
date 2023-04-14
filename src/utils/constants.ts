@@ -3,6 +3,7 @@ export const tables = {
   magicCodeEmployeeTable: 'employeeRegistration',
   users: 'users',
   accessTable: 'orgAccessTable',
+  userRequestHistory: 'usersRequestHistory',
 };
 
 export const tableFields = {
@@ -31,5 +32,12 @@ export const tableFields = {
     orgID: 'orgCode',
     tokenElement: 'tokenElement',
     accessToken: 'accessToken',
+  },
+  userRequestHistory: {
+    approved: 'approved',
+    accessID: 'accessID',
+    orgID: 'orgID',
+    userID: 'userID',
+    remarks: 'remarks',
   },
 };

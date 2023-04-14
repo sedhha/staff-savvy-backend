@@ -71,14 +71,8 @@ export class WixConnectorAppService {
     const fieldNameToUpdate = isAdmin
       ? tableFields.magicCodeTables.userUID
       : tableFields.magicCodeEmployeeTable.employeeUID;
-    const {
-      emailAddress,
-      securePassword,
-      firstName,
-      lastName,
-      orgCode,
-      employeeCode,
-    } = user;
+    const { emailAddress, securePassword, firstName, lastName, employeeCode } =
+      user;
     const remainingFields = isAdmin
       ? {}
       : {
@@ -111,7 +105,7 @@ export class WixConnectorAppService {
                 data: {
                   firstName: firstName,
                   lastName: lastName,
-                  orgCode: orgCode,
+                  orgCode: (data[0] as IRegistrationTable).orgCode,
                   employeeCode: employeeCode,
                   orgAdmin: isAdmin,
                   email_confirm: true,

@@ -1,12 +1,24 @@
 
-# Login User to the Service
+# Login Admin to the Service
 POST {{BASEURL}}/auth/login
 Content-Type: application/json
 x-wix-api-key: {{WIX_BACKEND_API_KEY}}
 
 {
     "email":"{{EMAIL}}",
-    "password":"{{PERSONAL_PASSWORD}}"
+    "password":"{{PASSWORD}}"
+}
+
+###
+
+# Login User to the Service
+POST {{BASEURL}}/auth/login
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+
+{
+    "email":"{{USER_EMAIL}}",
+    "password":"{{PASSWORD}}"
 }
 
 ###
@@ -19,7 +31,7 @@ x-wix-api-key: {{WIX_BACKEND_API_KEY}}
 {
     "firstName":"Shivam",
     "lastName":"Sahil",
-    "emailAddress":"{{EMAIL}}",
+    "emailAddress":"{{USER_EMAIL}}",
     "orgCode":"{{ORG_CODE}}",
     "employeeCode": "{{EMPLOYEE_CODE}}",
     "securePassword": "{{PASSWORD}}"

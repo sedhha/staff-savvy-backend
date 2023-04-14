@@ -21,33 +21,17 @@ export class UserAppService {
       .then(({ error, data }) => {
         if (error)
           throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-        const pC = {};
-        const sC = {};
-        return data.reduce(
-          (acc, curr) => {
-            const primaryCategory =
-              curr[tableFields.accessTable.primaryCategory];
-            const secondaryCategory =
-              curr[tableFields.accessTable.secondaryCategory];
-            const accessToken = curr[tableFields.accessTable.accessToken];
-            if (!pC[primaryCategory]) {
-              pC[primaryCategory] = true;
-              acc.primary.push({
-                label: primaryCategory,
-                value: primaryCategory,
-              });
-            }
-            if (!sC[secondaryCategory]) {
-              sC[secondaryCategory] = true;
-              acc.secondary.push({
-                label: secondaryCategory,
-                value: accessToken,
-              });
-            }
-            return acc;
-          },
-          { primary: [], secondary: [] },
-        );
+        return data.reduce((acc, curr) => {
+          const primaryCategory = curr[tableFields.accessTable.primaryCategory];
+          const secondaryCategory =
+            curr[tableFields.accessTable.secondaryCategory];
+          const accessToken = curr[tableFields.accessTable.accessToken];
+          const element = { label: secondaryCategory, value: accessToken };
+          if (!acc[primaryCategory]) acc[primaryCategory] = [element];
+          else acc[primaryCategory].push(element);
+
+          return acc;
+        }, {});
       });
   }
 

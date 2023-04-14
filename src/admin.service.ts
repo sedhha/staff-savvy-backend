@@ -68,16 +68,24 @@ export class AdminAppService {
       .then(({ error, data }) => {
         if (error)
           throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        const pC = {};
+        const sC = {};
         const finalData = (data as unknown as IAccessFE[]).reduce(
           (acc, curr) => {
-            acc.primaryCategories.push({
-              label: curr.primaryCategory,
-              value: curr.primaryCategory,
-            });
-            acc.secondaryCategories.push({
-              label: curr.secondaryCategory,
-              value: curr.secondaryCategory,
-            });
+            if (!pC[curr.primaryCategory]) {
+              pC[curr.primaryCategory] = true;
+              acc.primaryCategories.push({
+                label: curr.primaryCategory,
+                value: curr.primaryCategory,
+              });
+            }
+            if (!sC[curr.secondaryCategory]) {
+              sC[curr.secondaryCategory] = true;
+              acc.secondaryCategories.push({
+                label: curr.secondaryCategory,
+                value: curr.secondaryCategory,
+              });
+            }
             return acc;
           },
           { primaryCategories: [], secondaryCategories: [] },

@@ -70,11 +70,17 @@ export class AdminAppService {
           throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         const finalData = (data as unknown as IAccessFE[]).reduce(
           (acc, curr) => {
-            acc.primary.push(curr.primaryCategory);
-            acc.secondary.push(curr.secondaryCategory);
+            acc.primaryCategories.push({
+              label: curr.primaryCategory,
+              value: curr.primaryCategory,
+            });
+            acc.secondaryCategories.push({
+              label: curr.secondaryCategory,
+              value: curr.secondaryCategory,
+            });
             return acc;
           },
-          { primary: [], secondary: [] },
+          { primaryCategories: [], secondaryCategories: [] },
         );
         return { data, categories: finalData };
       });

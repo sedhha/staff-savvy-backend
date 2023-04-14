@@ -118,7 +118,7 @@ export class AdminAppService {
         });
     } catch (error) {
       throw new HttpException(
-        zodErrorFormatter(error.errors),
+        `${zodErrorFormatter(error.errors)}::'${payload}'`,
         HttpStatus.BAD_REQUEST,
       );
     }

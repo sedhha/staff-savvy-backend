@@ -29,6 +29,18 @@ Content-Type: application/json
 x-wix-api-key: {{WIX_BACKEND_API_KEY}}
 Authorization: bearer {{BEARER_TOKEN}}
 
+### Request All Org Accesses Requests by users
+GET {{BASEURL}}/admin/get-all-accesses-request
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}
+
+### Approve Request by ID
+GET {{BASEURL}}/admin/approve-request-by-request-id?requestID={{REQUEST_ID}}
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}
+
 ### Add Access to Org
 POST {{BASEURL}}/admin/add-access-to-org
 Content-Type: application/json

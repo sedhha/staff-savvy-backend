@@ -10,6 +10,7 @@ import {
 import { AdminAppService } from './admin.service';
 import { ISupaBaseUser } from './wixConnectorApp.interface';
 import { IAccessFE } from './admin.interfaces';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 @Controller('admin')
 export class AdminAppController {
@@ -60,6 +61,26 @@ export class AdminAppController {
     return this.appService.addAccessToOrg(
       body.supabaseUser.user_metadata.employeeCode,
       body.payload,
+    );
+  }
+
+  @Get('get-all-accesses-request')
+  async getAllAccessRequest(@Body() body: { supabaseUser: ISupaBaseUser }) {
+    return this.appService.getAllAccessRequest(
+      body.supabaseUser.user_metadata.employeeCode,
+    );
+  }
+
+  @Get('approve-request-by-request-id')
+  async approveRequestByRequestID(
+    @Body() body: { supabaseUser: ISupaBaseUser },
+    @Query() params: { requestID: string },
+  ) {
+    if (!params.requestID)
+      throw new HttpException('Request ID  not found', HttpStatus.BAD_REQUEST);
+    return this.appService.updateUserRequest(
+      body.supabaseUser.user_metadata.employeeCode,
+      params.requestID,
     );
   }
 }

@@ -41,5 +41,6 @@ export const tableFields = {
     remarks: 'remarks',
     primaryCategory: 'primaryCategory',
     secondaryCategory: 'secondaryCategory',
+    requestID: 'requestID',
   },
 };

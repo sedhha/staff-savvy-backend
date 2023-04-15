@@ -94,6 +94,52 @@ export class AdminAppService {
       });
   }
 
+  async getAllAccessRequest(orgCode: string) {
+    return Admin.from(tables.userRequestHistory)
+      .select(
+        [
+          tableFields.userRequestHistory.primaryCategory,
+          tableFields.userRequestHistory.secondaryCategory,
+          tableFields.userRequestHistory.userID,
+          tableFields.userRequestHistory.remarks,
+          tableFields.userRequestHistory.requestID,
+        ].join(','),
+      )
+      .eq(tableFields.userRequestHistory.orgID, orgCode)
+      .then(({ data, error }) => {
+        if (error) return [];
+        return data;
+      });
+  }
+
+  async updateUserRequest(orgCode: string, requestID: string) {
+    return Admin.from(tables.userRequestHistory)
+      .select(tableFields.userRequestHistory.approved)
+      .eq(tableFields.userRequestHistory.orgID, orgCode)
+      .eq(tableFields.userRequestHistory.requestID, requestID)
+      .eq(tableFields.userRequestHistory.approved, false)
+      .then(({ data, error }) => {
+        if (!data || error)
+          throw new HttpException(
+            'No Such Request Found to update.',
+            HttpStatus.AMBIGUOUS,
+          );
+        return Admin.from(tables.userRequestHistory)
+          .update({ [tableFields.userRequestHistory.approved]: true })
+          .eq(tableFields.userRequestHistory.orgID, orgCode)
+          .eq(tableFields.userRequestHistory.requestID, requestID)
+          .eq(tableFields.userRequestHistory.approved, false)
+          .then(({ error }) => {
+            if (error)
+              throw new HttpException(
+                error.message,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+              );
+            return;
+          });
+      });
+  }
+
   async addAccessToOrg(orgCode: string, payload: IAccessFE[]) {
     try {
       const result = accessZodSchema.parse(payload) as IAccessFE[];

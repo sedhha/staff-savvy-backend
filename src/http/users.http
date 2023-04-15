@@ -23,7 +23,7 @@ Authorization: bearer {{BEARER_TOKEN}}
 {
     "payload": {
         "remarks": "I want to try out this App.",
-        "accessID": "0"
+        "accessID": "1"
     }
 }
 

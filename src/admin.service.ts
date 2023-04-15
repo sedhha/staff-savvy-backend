@@ -106,6 +106,7 @@ export class AdminAppService {
         ].join(','),
       )
       .eq(tableFields.userRequestHistory.orgID, orgCode)
+      .eq(tableFields.userRequestHistory.approved, false)
       .then(({ data, error }) => {
         if (error) return [];
         return data;

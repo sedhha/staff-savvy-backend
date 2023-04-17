@@ -35,8 +35,29 @@ export class WixConnectorAppService {
       })
       .then((response) => {
         const { data, error } = response;
+        const employeeID = data.user.user_metadata.employeeCode;
         if (error) throw new HttpException(error.message, error.status);
-        return { data: { user: data.user, session: data.session } };
+        if (!employeeID)
+          throw new HttpException(
+            'User not found. Kindly contact the administrator or reset the account.',
+            HttpStatus.BAD_REQUEST,
+          );
+        return Admin.from(tables.userRequestHistory)
+          .select(tableFields.userRequestHistory.accessID)
+          .eq(tableFields.userRequestHistory.userID, employeeID)
+          .then((res) => {
+            if (res.error)
+              throw new HttpException(res.error.message, HttpStatus.NOT_FOUND);
+            return {
+              data: {
+                user: data.user,
+                session: data.session,
+                access: res.data.map(
+                  (item) => item[tableFields.userRequestHistory.accessID],
+                ),
+              },
+            };
+          });
       });
   }
   async signUpUser(payload: ISignUpUser): Promise<{

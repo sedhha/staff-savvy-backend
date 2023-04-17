@@ -56,3 +56,15 @@ Authorization: bearer {{BEARER_TOKEN}}
                     }
                 ]
 }
+
+### Request SSO ID of the Org
+GET {{BASEURL}}/admin/get-sso-id
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}
+
+### Request new SSO ID of the Org
+GET {{BASEURL}}/admin/generate-new-sso-id
+Content-Type: application/json
+x-wix-api-key: {{WIX_BACKEND_API_KEY}}
+Authorization: bearer {{BEARER_TOKEN}}

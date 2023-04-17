@@ -10,6 +10,7 @@ export const tableFields = {
   magicCodeTables: {
     userUID: 'userUID',
     orgID: 'orgCode',
+    ssoID: 'ssoID',
   },
   magicCodeEmployeeTable: {
     employeeCode: 'employeeCode',

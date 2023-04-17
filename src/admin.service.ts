@@ -179,4 +179,35 @@ export class AdminAppService {
       );
     }
   }
+
+  async getSSOID(orgCode: string) {
+    return Admin.from(tables.magicCodeTables)
+      .select(tableFields.magicCodeTables.ssoID)
+      .eq(tableFields.magicCodeTables.orgID, orgCode)
+      .then(({ data, error }) => {
+        if (error)
+          throw new HttpException(
+            error.message,
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        return {
+          ssoID: data?.[0]?.[tableFields.magicCodeTables.ssoID] ?? null,
+        };
+      });
+  }
+
+  async generateNewSSOID(orgCode: string) {
+    const ssoID = uuidv4();
+    return Admin.from(tables.magicCodeTables)
+      .update({ [tableFields.magicCodeTables.ssoID]: ssoID })
+      .eq(tableFields.magicCodeTables.orgID, orgCode)
+      .then(({ error }) => {
+        if (error)
+          throw new HttpException(
+            error.message,
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        return;
+      });
+  }
 }

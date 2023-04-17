@@ -83,4 +83,17 @@ export class AdminAppController {
       params.requestID,
     );
   }
+  @Get('get-sso-id')
+  async getSSOID(@Body() body: { supabaseUser: ISupaBaseUser }) {
+    return this.appService.getSSOID(
+      body.supabaseUser.user_metadata.employeeCode,
+    );
+  }
+
+  @Get('generate-new-sso-id')
+  async generateNewSSOID(@Body() body: { supabaseUser: ISupaBaseUser }) {
+    return this.appService.generateNewSSOID(
+      body.supabaseUser.user_metadata.employeeCode,
+    );
+  }
 }

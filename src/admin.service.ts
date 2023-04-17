@@ -207,7 +207,7 @@ export class AdminAppService {
             error.message,
             HttpStatus.INTERNAL_SERVER_ERROR,
           );
-        return;
+        return { ssoID };
       });
   }
 }

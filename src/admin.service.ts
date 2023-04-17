@@ -41,6 +41,7 @@ export class AdminAppService {
     return Admin.from(tables.magicCodeEmployeeTable)
       .select(tableFields.magicCodeEmployeeTable.employeeCode)
       .eq(tableFields.magicCodeEmployeeTable.orgID, orgCode)
+      .eq(tableFields.magicCodeEmployeeTable.registered, false)
       .then(({ error, data }) => {
         if (error)
           throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

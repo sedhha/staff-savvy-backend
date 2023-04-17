@@ -21,6 +21,7 @@ export const tableFields = {
     lastName: 'lastName',
     permissions: 'permissions',
     isActive: 'isActive',
+    registered: 'registered',
   },
   users: {
     userID: 'id',
